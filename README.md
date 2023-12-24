@@ -20,12 +20,24 @@ cargo build --release --target wasm32-wasi
 > Serve the wasm plug-in with Simplism:
 ```bash
 simplism listen \
-./target/wasm32-wasi/release/hello.wasm handle --http-port 8080 --log-level info
+./target/wasm32-wasi/release/small_zoo.wasm handle --http-port 8080 --log-level info
 ```
 
 > Query the wasm plug-in:
 ```bash
-curl http://localhost:8080/hello/world \
+curl http://localhost:8080/ant \
 -H 'content-type: application/json; charset=utf-8' \
--d '{"firstName":"Bob","lastName":"Morane"}'
+-d 'Bob Morane'
+
+curl http://localhost:8080/cow \
+-H 'content-type: application/json; charset=utf-8' \
+-d 'Bill Balantine'
+
+curl http://localhost:8080/elephant \
+-H 'content-type: application/json; charset=utf-8' \
+-d 'John Doe'
+
+curl http://localhost:8080/tiger \
+-H 'content-type: application/json; charset=utf-8' \
+-d 'Jane Doe'
 ```
