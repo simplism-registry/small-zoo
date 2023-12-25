@@ -1,0 +1,5 @@
+kubeconfig.yaml
+deploy.*.yaml
+!deploy.tpl.yaml
+*.crt
+*.key

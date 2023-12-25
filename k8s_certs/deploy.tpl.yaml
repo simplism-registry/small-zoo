@@ -1,0 +1,62 @@
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${APPLICATION_NAME}
+spec:
+  selector:
+    app: ${APPLICATION_NAME}
+  ports:
+    - port: 80
+      targetPort: 8080
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${APPLICATION_NAME}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ${APPLICATION_NAME}
+  template:
+    metadata:
+      labels:
+        app: ${APPLICATION_NAME}
+    spec:
+      containers:
+      - name: ${APPLICATION_NAME}
+        image: ${IMAGE_NAME}:${IMAGE_TAG}
+        command: ["/simplism"]
+        args: ["listen", "${WASM_FILE}", "${FUNCTION_NAME}", "--wasm-url", "${WASM_URL}"]
+        ports:
+          - containerPort: 8080
+        imagePullPolicy: IfNotPresent
+---
+# Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ${APPLICATION_NAME}
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-issuer
+spec:
+  tls:
+  - hosts:
+    - ${APPLICATION_NAME}.${DOMAIN_NAME}
+    #secretName: tls-small-zoo-ingress-http
+    secretName: small-zoo.simplism.cloud-tls
+  rules:
+    - host: ${APPLICATION_NAME}.${DOMAIN_NAME}
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service: 
+              name: ${APPLICATION_NAME}
+              port: 
+                number: 80
+
