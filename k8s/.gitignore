@@ -1,0 +1,3 @@
+kubeconfig.yaml
+deploy.*.yaml
+!deploy.tpl.yaml
