@@ -41,13 +41,12 @@ kind: Ingress
 metadata:
   name: ${APPLICATION_NAME}
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod-issuer
+    kubernetes.io/ingress.class: traefik
 spec:
   tls:
   - hosts:
     - ${APPLICATION_NAME}.${DOMAIN_NAME}
-    #secretName: tls-small-zoo-ingress-http
-    secretName: small-zoo.simplism.cloud-tls
+    secretName: small-zoo-tls
   rules:
     - host: ${APPLICATION_NAME}.${DOMAIN_NAME}
       http:
